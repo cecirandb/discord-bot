@@ -5,6 +5,7 @@ const {
   GatewayIntentBits,
   EmbedBuilder,
   Partials,
+  ActivityType,
 } = require("discord.js");
 const client = new Client({
   intents: [
@@ -23,7 +24,15 @@ const dstoken = process.env.DISCORD_TOKEN;
 client.on("ready", () => {
   console.log("Bot Now connected!");
   console.log("Logged In as", client.user.tag);
-  client.user.setStatus("online"); // online, idle, invisible, dnd
+  client.user.setPresence({
+    status: "online",
+    activities: [
+      {
+        name: "mhelp 😎 M150",
+        type: ActivityType.Watching,
+      },
+    ],
+  }); // online, idle, invisible, dnd
 
   console.log(`Bot status: ${client.user.presence.status}`);
 
@@ -43,6 +52,25 @@ client.on("messageCreate", async (message) => {
 
   if (content.startsWith(prefix) && content.includes("twitch")) {
     await message.channel.send(`Twitch https://www.twitch.tv/ceecid 💖`);
+  }
+
+  if (content.startsWith(prefix) && content.includes("150")) {
+    await message.channel.send(`El mejor discord del mundo, por? 💖`);
+  }
+
+  if (content.startsWith(prefix) && content.includes("help")) {
+    const embed = new EmbedBuilder()
+      .setColor("Random")
+      .setTitle(`Available commands🧐`)
+      .setDescription("🛠 New commands coming soon 🛠")
+      .addFields(
+        { name: "• m ping", value: "Command for testing only." },
+        { name: "• m avatar", value: "See your avatar." },
+        { name: "• m test", value: "Command for testing only." }
+      )
+      .setTimestamp();
+
+    await message.channel.send({ embeds: [embed] });
   }
 
   if (content.startsWith(prefix) && content.includes("avatar")) {

@@ -1,4 +1,4 @@
-PREFIX m
+`PREFIX` `m`
 
 First time programming a discord bot✨
 

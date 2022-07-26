@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const {
   Client,
   GatewayIntentBits,
@@ -15,6 +17,8 @@ const client = new Client({
   partials: [Partials.Channel, Partials.Message],
 });
 
+const dstoken = process.env.DISCORD_TOKEN;
+
 // Bot listenning messages
 client.on("ready", () => {
   console.log("Bot Now connected!");
@@ -28,34 +32,36 @@ client.on("ready", () => {
 });
 
 client.on("messageCreate", async (message) => {
+  let prefix = "m";
+
   if (message.author.bot) return;
   const content = message.content.toLowerCase();
 
-  if (content === "ping") {
+  if (content.startsWith(prefix) && content.includes("ping")) {
     await message.reply(`pong`);
   }
 
-  if (content === "hola") {
-    await message.channel.send(`Hola ${message.author}`);
+  if (content.startsWith(prefix) && content.includes("twitch")) {
+    await message.channel.send(`Twitch https://www.twitch.tv/ceecid 💖`);
   }
 
-  if (content === "avatar") {
+  if (content.startsWith(prefix) && content.includes("avatar")) {
     const embed = new EmbedBuilder()
-      .setColor(0xffe8e0)
-      .setTitle("name")
-      .setDescription("Avatar URL")
+      .setColor("Random")
+      .setTitle(`✨ ${message.author.username}`)
+      .setDescription("command create by ceecid")
       .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
       .setTimestamp();
 
     await message.channel.send({ embeds: [embed] });
   }
 
-  if (content.includes("!test")) {
-    await message.channel.send("Glad you are testing");
+  if (content.includes("m test")) {
+    await message.reply("Glad you are testing");
   }
 
   // Deleting 100 messages
-  if (content.startsWith("!clean123")) {
+  if (content.startsWith("m clean123")) {
     async function clear() {
       try {
         // await msg.delete();
@@ -74,6 +80,4 @@ client.on("error", (err) => {
   console.log(err.message);
 });
 
-const token =
-  "MTAwMDU1MDYwODI5OTg5Njg1Mg.GIilh8.VPqh2n-WACZcaoQN6-VkYEYCfWdiS2cIexABj8"; // old token
-client.login(token);
+client.login(dstoken);

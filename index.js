@@ -93,7 +93,13 @@ client.on("messageCreate", async (message) => {
     async function clear() {
       try {
         // await msg.delete();
-        const fetched = await message.channel.fetchMessages({ limit: 99 });
+        const fetched = await message.channel.messages
+          .fetch({
+            limit: 5,
+          })
+          .then((messages) => {
+            return messages;
+          });
         message.channel.bulkDelete(fetched);
         console.log("Messages deleted");
       } catch (e) {

@@ -58,6 +58,48 @@ client.on("messageCreate", async (message) => {
     await message.channel.send(`El mejor discord del mundo, por? 💖`);
   }
 
+  if (content.startsWith(prefix) && content.includes("emojis")) {
+    const reactions = await message.reply({
+      content: "Reacting with emojis!",
+      fetchReply: true,
+    });
+    Promise.all([
+      reactions.react("🤡"),
+      reactions.react("🧐"),
+      reactions.react("🤠"),
+    ]).catch((error) =>
+      console.error("One of the emojis failed to react:", error)
+    );
+  }
+
+  if (content.startsWith(prefix) && content.includes("hay")) {
+    message.react("😄").then(() => message.react("😢"));
+
+    const filter = (reaction, user) => {
+      return (
+        ["😄", "😢"].includes(reaction.emoji.name) &&
+        user.id === message.author.id
+      );
+    };
+
+    message
+      .awaitReactions({ filter, max: 1, time: 60000, errors: ["time"] })
+      .then((collected) => {
+        const reaction = collected.first();
+
+        if (reaction.emoji.name === "😄") {
+          message.reply("Eaaaaaaaaa😎.");
+        } else if (reaction.emoji.name === "😢") {
+          message.reply(
+            "https://www.youtube.com/watch?v=ymvYySd_P2E to make you feel better😚"
+          );
+        }
+      })
+      .catch((c) => {
+        message.reply("Don't react in time🤨");
+      });
+  }
+
   if (content.startsWith(prefix) && content.includes("help")) {
     const embed = new EmbedBuilder()
       .setColor("Random")
@@ -66,7 +108,15 @@ client.on("messageCreate", async (message) => {
       .addFields(
         { name: "• m ping", value: "Command for testing only." },
         { name: "• m avatar", value: "See your avatar." },
-        { name: "• m test", value: "Command for testing only." }
+        { name: "• m test", value: "Command for testing only." },
+        {
+          name: "• m clean",
+          value: "Command to delete the last five messages.",
+        },
+        {
+          name: "• m hay",
+          value: "How Are You? Command.",
+        }
       )
       .setTimestamp();
 
@@ -88,8 +138,8 @@ client.on("messageCreate", async (message) => {
     await message.reply("Glad you are testing");
   }
 
-  // Deleting 100 messages
-  if (content.startsWith("m clean123")) {
+  // Deleting 5 messages
+  if (content.startsWith(prefix) && content.includes("clean")) {
     async function clear() {
       try {
         // await msg.delete();

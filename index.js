@@ -19,6 +19,7 @@ const client = new Client({
 });
 
 const dstoken = process.env.DISCORD_TOKEN;
+const { KeepAlive } = require("./keep_alive");
 
 // Bot listenning messages
 client.on("ready", () => {

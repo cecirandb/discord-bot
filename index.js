@@ -29,7 +29,7 @@ client.on("ready", () => {
     status: "online",
     activities: [
       {
-        name: "mhelp 😎 M150",
+        name: "mhelp · M150",
         type: ActivityType.Watching,
       },
     ],
@@ -73,6 +73,7 @@ client.on("messageCreate", async (message) => {
     );
   }
 
+  // How Are You? command
   if (content.startsWith(prefix) && content.includes("hay")) {
     message.react("😄").then(() => message.react("😢"));
 
@@ -101,38 +102,22 @@ client.on("messageCreate", async (message) => {
       });
   }
 
-  if (content.startsWith(prefix) && content.includes("help")) {
+  if (content.startsWith(prefix) && content.includes("avatar")) {
     const embed = new EmbedBuilder()
       .setColor("Random")
-      .setTitle(`Available commands🧐`)
-      .setDescription("🛠 New commands coming soon 🛠")
-      .addFields(
-        { name: "• m ping", value: "Command for testing only." },
-        { name: "• m avatar", value: "See your avatar." },
-        { name: "• m test", value: "Command for testing only." },
-        {
-          name: "• m clean",
-          value: "Command to delete the last five messages.",
-        },
-        {
-          name: "• m hay",
-          value: "How Are You? Command.",
-        }
-      )
+      .setTitle(`✨ ${message.author.username}`)
+      .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
       .setTimestamp();
 
     await message.channel.send({ embeds: [embed] });
   }
 
-  if (content.startsWith(prefix) && content.includes("avatar")) {
-    const embed = new EmbedBuilder()
-      .setColor("Random")
-      .setTitle(`✨ ${message.author.username}`)
-      .setDescription("command create by ceecid")
-      .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
-      .setTimestamp();
+  // Add new role
+  if (content.startsWith(prefix) && content.includes("role")) {
+    var role = message.guild.roles.cache.find((role) => role.name === "tesst");
+    message.member.roles.add(role);
 
-    await message.channel.send({ embeds: [embed] });
+    await message.reply("The test role has been added to you 😯.");
   }
 
   if (content.includes("m test")) {
@@ -158,6 +143,33 @@ client.on("messageCreate", async (message) => {
       }
     }
     clear();
+  }
+
+  if (content.startsWith(prefix) && content.includes("help")) {
+    const embed = new EmbedBuilder()
+      .setColor("Random")
+      .setTitle(`Available commands🧐`)
+      .setDescription("🛠 Supports Commands coming soon 🛠")
+      .addFields(
+        { name: "• m ping", value: "Command for testing only." },
+        { name: "• m avatar", value: "See your avatar." },
+        { name: "• m test", value: "Command for testing only." },
+        {
+          name: "• m clean",
+          value: "Command to delete the last five messages.",
+        },
+        {
+          name: "• m hay",
+          value: "How Are You? command.",
+        },
+        {
+          name: "• m role",
+          value: "Command to test adding roles.",
+        }
+      )
+      .setTimestamp();
+
+    await message.channel.send({ embeds: [embed] });
   }
 });
 
